@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const data = await apiClient.get<{ user: User; organizations: Organization[] }>('/auth/me');
       setUser(data.user);
       setOrganizations(data.organizations);
-      
+
       // Auto-select first org if none selected, or re-select current if still exists
       if (data.organizations.length > 0) {
         const currentActiveId = localStorage.getItem('activeOrgId');

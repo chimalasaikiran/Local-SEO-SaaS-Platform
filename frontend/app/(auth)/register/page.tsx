@@ -9,7 +9,7 @@ import { useAuth } from '../../../stores/auth-context';
 export default function RegisterPage() {
   const router = useRouter();
   const { refreshAuth } = useAuth();
-  
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -42,10 +42,10 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50/30 relative overflow-hidden py-12">
+    <div className="min-h-screen flex items-center justify-center bg-green-50/30 relative overflow-hidden py-12 font-sans">
       {/* Background Dots Pattern */}
       <div className="absolute inset-0 z-0 pointer-events-none opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, #10b981 1px, transparent 0)', backgroundSize: '32px 32px' }}></div>
-      
+
       {/* Top Header */}
       <div className="absolute top-6 left-6 right-6 flex justify-between items-center z-10">
         <div className="flex items-center space-x-2">
@@ -64,9 +64,9 @@ export default function RegisterPage() {
       </div>
 
       <div className="relative z-10 w-full max-w-lg mt-8">
-        
+
         {/* Floating Badges */}
-        <div className="absolute -top-8 -right-8 bg-white shadow-xl rounded-xl p-3 flex flex-col items-center animate-bounce" style={{ animationDuration: '3s', animationDelay: '0.5s' }}>
+        <div className="absolute -top-8 -right-8 bg-white shadow-xl rounded-xl p-3 flex flex-col items-center animate-bounce z-20" style={{ animationDuration: '3s', animationDelay: '0.5s' }}>
           <div className="flex items-center space-x-2">
             <span className="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-xs font-bold"><svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg></span>
             <div className="flex flex-col">
@@ -78,7 +78,7 @@ export default function RegisterPage() {
 
         {/* Main Card */}
         <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/40 p-8 sm:p-10 w-full relative">
-          
+
           <div className="flex justify-center mb-6">
             <span className="px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-xs font-medium border border-emerald-100 flex items-center shadow-sm">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2"></span>
@@ -109,7 +109,7 @@ export default function RegisterPage() {
                 placeholder="Sarah Jenkins"
               />
             </div>
-            
+
             <div>
               <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Work Email</label>
               <div className="relative">
@@ -191,7 +191,7 @@ export default function RegisterPage() {
             >
               {loading ? 'Creating Account...' : 'Start Free 14-Day Trial \u2192'}
             </button>
-            
+
             <div className="mt-8 text-center text-sm text-gray-500 pb-2">
               Already have an account?{' '}
               <Link href="/login" className="font-bold text-emerald-600 hover:text-emerald-500 transition-colors">

@@ -5,8 +5,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.checkDbConnection = void 0;
 const pg_1 = require("pg");
+const path_1 = __importDefault(require("path"));
 const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+// Load .env from project root
+dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../../.env') });
 // Use DATABASE_URL if provided (standard for Neon), otherwise fallback to individual credentials
 const pool = new pg_1.Pool(process.env.DATABASE_URL
     ? {

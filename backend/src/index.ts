@@ -39,7 +39,7 @@ import { checkDbConnection } from './config/db';
 
 app.listen(port, async () => {
   console.log(`[Backend] Server running on port ${port}`);
-  
+
   // Verify Database Connection
   const dbConnected = await checkDbConnection();
   if (dbConnected) {

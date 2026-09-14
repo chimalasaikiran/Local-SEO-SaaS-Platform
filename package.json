@@ -12,6 +12,7 @@
     "clean": "pnpm -r run clean"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "typescript": "^5.5.4"
   }
 }

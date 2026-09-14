@@ -1,0 +1,79 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const db_1 = __importDefault(require("../config/db"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
+const SEED_PASSWORD = 'password123'; // Development only!
+async function runSeed() {
+    const client = await db_1.default.connect();
+    try {
+        console.log('Starting seed...');
+        await client.query('BEGIN');
+        // Hash password
+        const passwordHash = await bcryptjs_1.default.hash(SEED_PASSWORD, 10);
+        // Create Users
+        const users = [
+            { email: 'owner@example.com', name: 'Owner User' },
+            { email: 'admin@example.com', name: 'Admin User' },
+            { email: 'member@example.com', name: 'Member User' },
+            { email: 'viewer@example.com', name: 'Viewer User' },
+            { email: 'xyz.owner@example.com', name: 'XYZ Owner' }
+        ];
+        const createdUsers = {};
+        for (const u of users) {
+            const res = await client.query(`INSERT INTO users (email, password_hash, name) 
+         VALUES ($1, $2, $3) 
+         ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name 
+         RETURNING id, email`, [u.email, passwordHash, u.name]);
+            createdUsers[res.rows[0].email] = res.rows[0].id;
+        }
+        // Create Organizations
+        const orgs = [
+            { name: 'ABC Digital Agency', slug: 'abc-digital-agency' },
+            { name: 'XYZ Marketing', slug: 'xyz-marketing' }
+        ];
+        const createdOrgs = {};
+        for (const o of orgs) {
+            const res = await client.query(`INSERT INTO organizations (name, slug) 
+         VALUES ($1, $2) 
+         ON CONFLICT (slug) DO UPDATE SET name = EXCLUDED.name 
+         RETURNING id, slug`, [o.name, o.slug]);
+            createdOrgs[res.rows[0].slug] = res.rows[0].id;
+        }
+        // Create Memberships for ABC Digital Agency
+        const abcOrgId = createdOrgs['abc-digital-agency'];
+        const abcMemberships = [
+            { email: 'owner@example.com', role: 'OWNER' },
+            { email: 'admin@example.com', role: 'ADMIN' },
+            { email: 'member@example.com', role: 'MEMBER' },
+            { email: 'viewer@example.com', role: 'VIEWER' }
+        ];
+        for (const m of abcMemberships) {
+            await client.query(`INSERT INTO organization_memberships (organization_id, user_id, role) 
+         VALUES ($1, $2, $3) 
+         ON CONFLICT (organization_id, user_id) DO UPDATE SET role = EXCLUDED.role`, [abcOrgId, createdUsers[m.email], m.role]);
+        }
+        // Create Memberships for XYZ Marketing
+        const xyzOrgId = createdOrgs['xyz-marketing'];
+        await client.query(`INSERT INTO organization_memberships (organization_id, user_id, role) 
+       VALUES ($1, $2, $3) 
+       ON CONFLICT (organization_id, user_id) DO UPDATE SET role = EXCLUDED.role`, [xyzOrgId, createdUsers['xyz.owner@example.com'], 'OWNER']);
+        await client.query('COMMIT');
+        console.log('Seed completed successfully!');
+        console.log('Development credentials:');
+        for (const u of users) {
+            console.log(`- ${u.email} / ${SEED_PASSWORD}`);
+        }
+    }
+    catch (error) {
+        await client.query('ROLLBACK');
+        console.error('Seed failed:', error);
+    }
+    finally {
+        client.release();
+        db_1.default.end();
+    }
+}
+runSeed();
