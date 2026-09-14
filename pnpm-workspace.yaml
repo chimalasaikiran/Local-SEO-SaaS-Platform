@@ -1,0 +1,8 @@
+packages:
+  - "frontend"
+  - "backend"
+  - "workers"
+
+allowBuilds:
+  msgpackr-extract: true
+  unrs-resolver: true
