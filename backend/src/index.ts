@@ -10,6 +10,8 @@ import { errorHandler } from './middlewares/errorHandler';
 import cookieParser from 'cookie-parser';
 import { authRouter } from './modules/auth/auth.routes';
 import { organizationsRouter } from './modules/organizations/organizations.routes';
+import { businessRoutes } from './modules/businesses/business.routes';
+import { locationRoutes } from './modules/locations/location.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -31,6 +33,9 @@ app.use(morgan('dev'));
 app.use('/api/v1/health', healthRouter);
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/organizations', organizationsRouter);
+app.use('/api/v1/organizations/:organizationId/businesses', businessRoutes);
+app.use('/api/v1/organizations/:organizationId/locations', locationRoutes);
+app.use('/api/v1/organizations/:organizationId/businesses/:businessId/locations', locationRoutes);
 
 // Error handling
 app.use(errorHandler);
