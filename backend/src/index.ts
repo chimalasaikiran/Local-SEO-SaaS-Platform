@@ -12,6 +12,7 @@ import { authRouter } from './modules/auth/auth.routes';
 import { organizationsRouter } from './modules/organizations/organizations.routes';
 import { businessRoutes } from './modules/businesses/business.routes';
 import { locationRoutes } from './modules/locations/location.routes';
+import { keywordRoutes } from './modules/keywords/keyword.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -36,6 +37,7 @@ app.use('/api/v1/organizations', organizationsRouter);
 app.use('/api/v1/organizations/:organizationId/businesses', businessRoutes);
 app.use('/api/v1/organizations/:organizationId/locations', locationRoutes);
 app.use('/api/v1/organizations/:organizationId/businesses/:businessId/locations', locationRoutes);
+app.use('/api/v1/organizations/:organizationId/keywords', keywordRoutes);
 
 // Error handling
 app.use(errorHandler);

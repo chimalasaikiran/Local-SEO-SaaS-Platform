@@ -126,6 +126,44 @@ async function runSeed() {
       }
     }
 
+    // Create Keywords for Sharma Dental - Hyderabad
+    const sharmaDentalBusId = createdBusinesses['sharma-dental'];
+    const hydLocation = await client.query(
+      `SELECT id FROM locations WHERE organization_id = $1 AND business_id = $2 AND name = $3`,
+      [abcOrgId, sharmaDentalBusId, 'Sharma Dental - Hyderabad']
+    );
+
+    if (hydLocation.rowCount && hydLocation.rowCount > 0) {
+      const hydLocId = hydLocation.rows[0].id;
+      const seedKeywords = [
+        'dentist',
+        'dentist near me',
+        'dental clinic',
+        'dental implants',
+        'root canal dentist',
+        'teeth whitening',
+        'orthodontist'
+      ];
+
+      for (const kw of seedKeywords) {
+        const normalized = kw.toLowerCase().trim();
+        const existingKw = await client.query(
+          `SELECT id FROM keywords WHERE organization_id = $1 AND location_id = $2 AND normalized_keyword = $3`,
+          [abcOrgId, hydLocId, normalized]
+        );
+
+        if (existingKw.rowCount === 0) {
+          await client.query(
+            `INSERT INTO keywords (
+              organization_id, business_id, location_id, keyword, normalized_keyword, 
+              search_engine, country_code, language_code, device
+            ) VALUES ($1, $2, $3, $4, $5, 'GOOGLE', 'IN', 'en', 'DESKTOP')`,
+            [abcOrgId, sharmaDentalBusId, hydLocId, kw, normalized]
+          );
+        }
+      }
+    }
+
     await client.query('COMMIT');
     console.log('Seed completed successfully!');
     console.log('Development credentials:');
