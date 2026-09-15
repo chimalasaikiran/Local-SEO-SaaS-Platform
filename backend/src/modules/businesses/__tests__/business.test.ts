@@ -5,7 +5,7 @@ import { authRouter } from '../../auth/auth.routes';
 import { businessRoutes } from '../business.routes';
 import { organizationsRouter } from '../../organizations/organizations.routes';
 import pool from '../../../config/db';
-import { errorHandler } from '../../../middlewares/error.middleware';
+import { errorHandler } from '../../../middlewares/errorHandler';
 
 const app = express();
 app.use(express.json());

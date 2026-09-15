@@ -13,6 +13,7 @@ import { organizationsRouter } from './modules/organizations/organizations.route
 import { businessRoutes } from './modules/businesses/business.routes';
 import { locationRoutes } from './modules/locations/location.routes';
 import { keywordRoutes } from './modules/keywords/keyword.routes';
+import rankTrackingRouter from './modules/rank-tracking/rankTracking.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -38,6 +39,7 @@ app.use('/api/v1/organizations/:organizationId/businesses', businessRoutes);
 app.use('/api/v1/organizations/:organizationId/locations', locationRoutes);
 app.use('/api/v1/organizations/:organizationId/businesses/:businessId/locations', locationRoutes);
 app.use('/api/v1/organizations/:organizationId/keywords', keywordRoutes);
+app.use('/api/v1/organizations/:organizationId/rank-tracking', rankTrackingRouter);
 
 // Error handling
 app.use(errorHandler);

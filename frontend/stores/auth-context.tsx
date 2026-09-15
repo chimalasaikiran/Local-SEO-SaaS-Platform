@@ -27,6 +27,7 @@ interface AuthContextType {
   setActiveOrganization: (orgId: string) => void;
   refreshAuth: () => Promise<void>;
   logout: () => Promise<void>;
+  hasPermission: (permission: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -86,6 +87,25 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   };
 
+  const hasPermission = useCallback((permission: string) => {
+    if (!activeOrganization) return false;
+    const role = activeOrganization.role;
+    if (role === 'OWNER' || role === 'ADMIN') return true;
+    
+    // MEMBER
+    if (role === 'MEMBER') {
+      if (permission.endsWith('.delete')) return false;
+      return true; // allows read, update, create, run
+    }
+    
+    // VIEWER
+    if (role === 'VIEWER') {
+      return permission.endsWith('.read');
+    }
+    
+    return false;
+  }, [activeOrganization]);
+
   return (
     <AuthContext.Provider
       value={{
@@ -96,7 +116,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         isAuthenticated: !!user,
         setActiveOrganization,
         refreshAuth,
-        logout
+        logout,
+        hasPermission
       }}
     >
       {children}

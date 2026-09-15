@@ -1,9 +1,12 @@
 import { Worker } from 'bullmq';
 import IORedis from 'ioredis';
 import dotenv from 'dotenv';
-import { handleTestJob } from './jobs/testJob';
+import path from 'path';
 
-dotenv.config();
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+import { handleTestJob } from './jobs/testJob';
+import { handleRankTrackingJob } from './jobs/rankTrackingWorker';
 
 const redisConnection = new IORedis({
   host: process.env.REDIS_HOST || 'localhost',
@@ -15,15 +18,20 @@ redisConnection.on('error', (err) => {
   console.error('[Worker Redis] Connection error:', err);
 });
 
-const worker = new Worker('local-seo-jobs', async (job) => {
+const worker = new Worker('rank-tracking-jobs', async (job) => {
   console.log(`[Worker] Processing job ${job.id} of type ${job.name}`);
   
   if (job.name === 'testJob') {
     return handleTestJob(job.data);
+  } else if (job.name === 'rankCheck') {
+    return handleRankTrackingJob(job.data);
   }
   
   throw new Error(`Unknown job type: ${job.name}`);
-}, { connection: redisConnection });
+}, { 
+  connection: redisConnection, 
+  concurrency: parseInt(process.env.WORKER_CONCURRENCY || '5', 10) 
+});
 
 worker.on('completed', (job) => {
   console.log(`[Worker] Job ${job.id} completed successfully`);

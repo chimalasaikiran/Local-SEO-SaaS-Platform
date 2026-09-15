@@ -35,7 +35,7 @@ export const UpdateKeywordSchema = z.object({
 
 export const ListKeywordsQuerySchema = z.object({
   page: z.coerce.number().int().min(1).optional().default(1),
-  limit: z.coerce.number().int().min(1).max(100).optional().default(25),
+  limit: z.coerce.number().int().min(1).max(500).optional().default(25),
   search: z.string().optional(),
   businessId: z.string().uuid().optional(),
   locationId: z.string().uuid().optional(),

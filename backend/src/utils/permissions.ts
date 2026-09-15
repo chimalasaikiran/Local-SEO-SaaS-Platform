@@ -29,6 +29,9 @@ export const PERMISSIONS = {
   
   'ranking.read': 'ranking.read',
   'ranking.create': 'ranking.create',
+  'ranking.update': 'ranking.update',
+  'ranking.delete': 'ranking.delete',
+  'ranking.run': 'ranking.run',
   
   'review.read': 'review.read',
   'review.reply': 'review.reply',
@@ -63,6 +66,9 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS['keyword.delete'],
     PERMISSIONS['ranking.read'],
     PERMISSIONS['ranking.create'],
+    PERMISSIONS['ranking.update'],
+    PERMISSIONS['ranking.delete'],
+    PERMISSIONS['ranking.run'],
     PERMISSIONS['review.read'],
     PERMISSIONS['review.reply'],
     PERMISSIONS['report.read'],
@@ -82,6 +88,8 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS['keyword.update'],
     PERMISSIONS['ranking.read'],
     PERMISSIONS['ranking.create'],
+    PERMISSIONS['ranking.update'],
+    PERMISSIONS['ranking.run'],
     PERMISSIONS['review.read'],
     PERMISSIONS['review.reply'],
     PERMISSIONS['report.read'],
