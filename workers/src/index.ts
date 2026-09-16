@@ -9,6 +9,7 @@ import { handleTestJob } from './jobs/testJob';
 import { handleRankTrackingJob } from './jobs/rankTrackingWorker';
 import { handleGeoDiscoveryJob } from './jobs/geoDiscoveryWorker';
 import { handleCompetitorRefreshJob } from './jobs/competitorWorker';
+import { handleAuditJob } from './jobs/auditWorker';
 
 const redisConnection = new IORedis({
   host: process.env.REDIS_HOST || 'localhost',
@@ -77,6 +78,24 @@ const competitorWorker = new Worker('competitor-jobs', async (job) => {
 
 competitorWorker.on('failed', (job, err) => {
   console.error(`[CompetitorWorker] Job ${job?.id} failed:`, err);
+});
+
+// Audit Jobs Worker
+const auditWorker = new Worker('seo-audit-jobs', async (job) => {
+  console.log(`[AuditWorker] Processing job ${job.id} of type ${job.name}`);
+  
+  if (job.name === 'runAudit') {
+    return handleAuditJob(job);
+  }
+  
+  throw new Error(`Unknown job type: ${job.name}`);
+}, { 
+  connection: redisConnection, 
+  concurrency: parseInt(process.env.AUDIT_WORKER_CONCURRENCY || '2', 10) 
+});
+
+auditWorker.on('failed', (job, err) => {
+  console.error(`[AuditWorker] Job ${job?.id} failed:`, err);
 });
 
 console.log('[Worker] Started successfully');
