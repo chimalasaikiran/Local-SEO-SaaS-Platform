@@ -38,6 +38,15 @@ export const PERMISSIONS = {
   
   'report.read': 'report.read',
   'report.create': 'report.create',
+
+  // Geo & Competitors
+  'geo.read': 'geo.read',
+  'geo.search': 'geo.search',
+  'competitor.read': 'competitor.read',
+  'competitor.create': 'competitor.create',
+  'competitor.update': 'competitor.update',
+  'competitor.delete': 'competitor.delete',
+  'competitor.discover': 'competitor.discover',
 } as const;
 
 export type Permission = typeof PERMISSIONS[keyof typeof PERMISSIONS];
@@ -73,6 +82,13 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS['review.reply'],
     PERMISSIONS['report.read'],
     PERMISSIONS['report.create'],
+    PERMISSIONS['geo.read'],
+    PERMISSIONS['geo.search'],
+    PERMISSIONS['competitor.read'],
+    PERMISSIONS['competitor.create'],
+    PERMISSIONS['competitor.update'],
+    PERMISSIONS['competitor.delete'],
+    PERMISSIONS['competitor.discover'],
   ],
   [ROLES.MEMBER]: [
     PERMISSIONS['organization.read'],
@@ -94,6 +110,12 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS['review.reply'],
     PERMISSIONS['report.read'],
     PERMISSIONS['report.create'],
+    PERMISSIONS['geo.read'],
+    PERMISSIONS['geo.search'],
+    PERMISSIONS['competitor.read'],
+    PERMISSIONS['competitor.create'],
+    PERMISSIONS['competitor.update'],
+    PERMISSIONS['competitor.discover'],
   ],
   [ROLES.VIEWER]: [
     PERMISSIONS['organization.read'],
@@ -104,6 +126,9 @@ export const ROLE_PERMISSIONS: Record<Role, Permission[]> = {
     PERMISSIONS['ranking.read'],
     PERMISSIONS['review.read'],
     PERMISSIONS['report.read'],
+    PERMISSIONS['geo.read'],
+    PERMISSIONS['geo.search'],
+    PERMISSIONS['competitor.read'],
   ]
 };
 

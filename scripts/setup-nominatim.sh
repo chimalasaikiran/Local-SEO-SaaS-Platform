@@ -1,0 +1,23 @@
+#!/bin/bash
+
+echo "================================================================"
+echo "Nominatim Local Setup Script"
+echo "This script provides instructions for setting up a local Nominatim instance."
+echo "================================================================"
+
+echo "NOTE: Do not automatically download the full planet OSM dataset."
+echo "Instead, use a regional extract (e.g., from Geofabrik)."
+echo "Example: wget https://download.geofabrik.de/europe/monaco-latest.osm.pbf"
+echo ""
+echo "To run Nominatim using Docker:"
+echo "1. Create a directory for data: mkdir -p nominatim-data"
+echo "2. Start the container with the PBF file:"
+echo ""
+echo "docker run -it \\"
+echo "  -e PBF_URL=https://download.geofabrik.de/europe/monaco-latest.osm.pbf \\"
+echo "  -e REPLICATION_URL=https://download.geofabrik.de/europe/monaco-updates/ \\"
+echo "  -p 8080:8080 \\"
+echo "  --name nominatim \\"
+echo "  mediagis/nominatim:4.3"
+echo ""
+echo "For production, update NOMINATIM_BASE_URL=http://nominatim:8080 in your .env"

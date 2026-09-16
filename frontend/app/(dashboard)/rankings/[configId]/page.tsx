@@ -103,6 +103,8 @@ export default function CampaignDetailPage() {
       avgPosition = null;
     }
 
+    const sampleRanking = allPointRankings[0];
+
     return {
       id: g.id,
       latitude: g.latitude,
@@ -110,7 +112,9 @@ export default function CampaignDetailPage() {
       rowIndex: g.row_index,
       columnIndex: g.column_index,
       distanceFromCenterMeters: g.distance_from_center_meters,
-      position: avgPosition
+      position: avgPosition,
+      keyword: sampleRanking?.keyword || config?.keyword || config?.search_query,
+      timestamp: sampleRanking?.created_at || sampleRanking?.checked_at || sampleRanking?.timestamp
     };
   });
 
@@ -203,6 +207,8 @@ export default function CampaignDetailPage() {
               businessLng={parseFloat(location.longitude)} 
               points={mapPoints} 
               gridSize={config.grid_size} 
+              hasRankingData={rankings.length > 0}
+              isLoading={!!runningStatus && !['COMPLETED', 'PARTIAL', 'FAILED', 'CANCELLED'].includes(runningStatus.status)}
             />
           ) : (
             <div className="p-12 text-center text-gray-500">Location coordinates unavailable</div>

@@ -14,6 +14,8 @@ import { businessRoutes } from './modules/businesses/business.routes';
 import { locationRoutes } from './modules/locations/location.routes';
 import { keywordRoutes } from './modules/keywords/keyword.routes';
 import rankTrackingRouter from './modules/rank-tracking/rankTracking.routes';
+import { geoRoutes } from './modules/geo/geo.routes';
+import { competitorsRoutes } from './modules/competitors/competitors.routes';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -40,6 +42,8 @@ app.use('/api/v1/organizations/:organizationId/locations', locationRoutes);
 app.use('/api/v1/organizations/:organizationId/businesses/:businessId/locations', locationRoutes);
 app.use('/api/v1/organizations/:organizationId/keywords', keywordRoutes);
 app.use('/api/v1/organizations/:organizationId/rank-tracking', rankTrackingRouter);
+app.use('/api/v1/geo', geoRoutes);
+app.use('/api/v1/organizations/:organizationId/competitors', competitorsRoutes);
 
 // Error handling
 app.use(errorHandler);

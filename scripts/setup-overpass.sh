@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "================================================================"
+echo "Overpass API Local Setup Script"
+echo "This script provides instructions for setting up a local Overpass instance."
+echo "================================================================"
+
+echo "To run Overpass using Docker for a specific region:"
+echo "1. Choose a regional extract from Geofabrik."
+echo "2. Run the wiktorn/overpass-api image."
+echo ""
+echo "docker run -e OVERPASS_META=yes \\"
+echo "  -e OVERPASS_MODE=init \\"
+echo "  -e OVERPASS_PLANET_URL=https://download.geofabrik.de/europe/monaco-latest.osm.bz2 \\"
+echo "  -e OVERPASS_RULES_LOAD=10 \\"
+echo "  -v \$(pwd)/overpass_db:/db \\"
+echo "  -p 12345:80 \\"
+echo "  -i -t \\"
+echo "  --name overpass \\"
+echo "  wiktorn/overpass-api"
+echo ""
+echo "For production, update OVERPASS_BASE_URL=http://overpass:80/api/interpreter in your .env"

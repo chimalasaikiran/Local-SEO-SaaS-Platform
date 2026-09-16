@@ -68,6 +68,8 @@ export default function RunDetailPage() {
       avgPosition = null;
     }
 
+    const sampleRanking = allPointRankings[0];
+
     return {
       id: g.id,
       latitude: g.latitude,
@@ -75,7 +77,9 @@ export default function RunDetailPage() {
       rowIndex: g.row_index,
       columnIndex: g.column_index,
       distanceFromCenterMeters: g.distance_from_center_meters,
-      position: avgPosition
+      position: avgPosition,
+      keyword: sampleRanking?.keyword || config?.keyword || config?.search_query,
+      timestamp: sampleRanking?.created_at || sampleRanking?.checked_at || sampleRanking?.timestamp || run.created_at
     };
   });
 
@@ -142,6 +146,8 @@ export default function RunDetailPage() {
             businessLng={parseFloat(location.longitude)} 
             points={mapPoints} 
             gridSize={config.grid_size} 
+            hasRankingData={rankings.length > 0}
+            isLoading={false}
           />
         </div>
       )}
