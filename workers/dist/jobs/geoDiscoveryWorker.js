@@ -29,14 +29,17 @@ async function handleGeoDiscoveryJob(data) {
       );
       out center ${limit || 100};
     `;
-        const baseUrl = process.env.OVERPASS_BASE_URL || 'https://overpass-api.de/api/interpreter';
+        const baseUrl = process.env.OVERPASS_BASE_URL || 'https://overpass.openstreetmap.fr/api/interpreter';
         const response = await fetch(baseUrl, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `data=${encodeURIComponent(query)}`
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+                'User-Agent': 'LocalSEOPlatform/1.0'
+            },
+            body: new URLSearchParams({ data: query })
         });
         if (!response.ok)
-            throw new Error('Overpass API error');
+            throw new Error(`Overpass API error: ${response.statusText}`);
         const json = await response.json();
         let discoveredCount = 0;
         // 3. Save to DB

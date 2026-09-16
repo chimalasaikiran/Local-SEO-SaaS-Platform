@@ -11,6 +11,7 @@ dotenv_1.default.config({ path: path_1.default.resolve(__dirname, '../../.env') 
 const testJob_1 = require("./jobs/testJob");
 const rankTrackingWorker_1 = require("./jobs/rankTrackingWorker");
 const geoDiscoveryWorker_1 = require("./jobs/geoDiscoveryWorker");
+const competitorWorker_1 = require("./jobs/competitorWorker");
 const redisConnection = new ioredis_1.default({
     host: process.env.REDIS_HOST || 'localhost',
     port: parseInt(process.env.REDIS_PORT || '6379', 10),
@@ -51,5 +52,19 @@ const geoWorker = new bullmq_1.Worker('geo-jobs', async (job) => {
 });
 geoWorker.on('failed', (job, err) => {
     console.error(`[GeoWorker] Job ${job?.id} failed:`, err);
+});
+// Competitor Jobs Worker
+const competitorWorker = new bullmq_1.Worker('competitor-jobs', async (job) => {
+    console.log(`[CompetitorWorker] Processing job ${job.id} of type ${job.name}`);
+    if (job.name === 'refreshCompetitor') {
+        return (0, competitorWorker_1.handleCompetitorRefreshJob)(job.data);
+    }
+    throw new Error(`Unknown job type: ${job.name}`);
+}, {
+    connection: redisConnection,
+    concurrency: 2
+});
+competitorWorker.on('failed', (job, err) => {
+    console.error(`[CompetitorWorker] Job ${job?.id} failed:`, err);
 });
 console.log('[Worker] Started successfully');

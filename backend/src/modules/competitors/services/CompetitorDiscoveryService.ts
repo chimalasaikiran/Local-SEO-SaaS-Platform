@@ -63,6 +63,7 @@ export class CompetitorDiscoveryService {
       await client.query('BEGIN');
       
       let discoveredCount = 0;
+      const discoveredCompetitors = [];
 
       for (const place of places) {
         // Upsert into geo_places
@@ -103,7 +104,7 @@ export class CompetitorDiscoveryService {
         const distanceMeters = parseFloat(distRes.rows[0].distance);
 
         // Upsert competitor mapping
-        await client.query(`
+        const compRes = await client.query(`
           INSERT INTO competitors (
             organization_id, business_id, location_id, geo_place_id,
             name, website_url, phone, category, latitude, longitude,
@@ -115,17 +116,19 @@ export class CompetitorDiscoveryService {
           DO UPDATE SET 
             distance_meters = EXCLUDED.distance_meters,
             updated_at = NOW()
+          RETURNING *
         `, [
           req.organizationId, req.businessId, req.locationId, geoPlaceId,
           place.name, place.websiteUrl || null, place.phone || null, place.category,
           place.latitude, place.longitude, distanceMeters, place.source
         ]);
 
+        discoveredCompetitors.push(compRes.rows[0]);
         discoveredCount++;
       }
 
       await client.query('COMMIT');
-      return { discovered: discoveredCount };
+      return discoveredCompetitors;
 
     } catch (error) {
       await client.query('ROLLBACK');

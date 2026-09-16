@@ -6,7 +6,7 @@ class OsmPoiProvider {
     baseUrl;
     queryBuilder;
     constructor(config) {
-        this.baseUrl = config?.baseUrl || process.env.OVERPASS_BASE_URL || 'https://overpass-api.de/api/interpreter';
+        this.baseUrl = config?.baseUrl || process.env.OVERPASS_BASE_URL || 'https://overpass.openstreetmap.fr/api/interpreter';
         this.queryBuilder = new OverpassQueryBuilder_1.OverpassQueryBuilder();
     }
     /**
@@ -17,10 +17,10 @@ class OsmPoiProvider {
         const response = await fetch(this.baseUrl, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'User-Agent': 'LocalSEOPlatform/1.0 (local-seo-platform@example.com)'
+                'Accept': 'application/json, text/plain, */*',
+                'User-Agent': 'LocalSEOPlatform/1.0'
             },
-            body: `data=${encodeURIComponent(query)}`
+            body: new URLSearchParams({ data: query })
         });
         if (!response.ok) {
             throw new Error(`Overpass API error: ${response.statusText}`);
@@ -64,8 +64,11 @@ class OsmPoiProvider {
             const query = '[out:json][timeout:1];node(0,0,0,0);out 1;';
             const response = await fetch(this.baseUrl, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: `data=${encodeURIComponent(query)}`
+                headers: {
+                    'Accept': 'application/json, text/plain, */*',
+                    'User-Agent': 'LocalSEOPlatform/1.0'
+                },
+                body: new URLSearchParams({ data: query })
             });
             return response.ok;
         }

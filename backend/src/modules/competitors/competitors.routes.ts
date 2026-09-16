@@ -19,10 +19,28 @@ router.post(
   CompetitorsController.discover
 );
 
+router.get(
+  '/compare',
+  requireOrganizationPermission('competitor.read'),
+  CompetitorsController.compare
+);
+
+router.get(
+  '/:competitorId',
+  requireOrganizationPermission('competitor.read'),
+  CompetitorsController.getDetail
+);
+
 router.post(
   '/:competitorId/track', 
   requireOrganizationPermission('competitor.update'), 
   CompetitorsController.track
+);
+
+router.post(
+  '/:competitorId/untrack', 
+  requireOrganizationPermission('competitor.update'), 
+  CompetitorsController.untrack
 );
 
 router.patch(
@@ -35,6 +53,18 @@ router.delete(
   '/:competitorId', 
   requireOrganizationPermission('competitor.delete'), 
   CompetitorsController.delete
+);
+
+router.get(
+  '/:competitorId/history',
+  requireOrganizationPermission('competitor.read'),
+  CompetitorsController.history
+);
+
+router.post(
+  '/:competitorId/refresh',
+  requireOrganizationPermission('competitor.update'),
+  CompetitorsController.refresh
 );
 
 export { router as competitorsRoutes };

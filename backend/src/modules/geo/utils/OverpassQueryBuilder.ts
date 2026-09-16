@@ -34,7 +34,7 @@ export class OverpassQueryBuilder {
    */
   mapCategoryToOsmTag(category: string): string {
     const normalized = category.toLowerCase().trim().replace(/\s+/g, '_');
-    return this.categoryMap[normalized] || `name~"(?i)${normalized}"`;
+    return this.categoryMap[normalized] || `"name"~"${normalized}",i`;
   }
 
   /**

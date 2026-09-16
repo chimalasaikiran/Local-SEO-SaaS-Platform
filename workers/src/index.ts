@@ -8,6 +8,7 @@ dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 import { handleTestJob } from './jobs/testJob';
 import { handleRankTrackingJob } from './jobs/rankTrackingWorker';
 import { handleGeoDiscoveryJob } from './jobs/geoDiscoveryWorker';
+import { handleCompetitorRefreshJob } from './jobs/competitorWorker';
 
 const redisConnection = new IORedis({
   host: process.env.REDIS_HOST || 'localhost',
@@ -58,6 +59,24 @@ const geoWorker = new Worker('geo-jobs', async (job) => {
 
 geoWorker.on('failed', (job, err) => {
   console.error(`[GeoWorker] Job ${job?.id} failed:`, err);
+});
+
+// Competitor Jobs Worker
+const competitorWorker = new Worker('competitor-jobs', async (job) => {
+  console.log(`[CompetitorWorker] Processing job ${job.id} of type ${job.name}`);
+  
+  if (job.name === 'refreshCompetitor') {
+    return handleCompetitorRefreshJob(job.data);
+  }
+  
+  throw new Error(`Unknown job type: ${job.name}`);
+}, { 
+  connection: redisConnection, 
+  concurrency: 2 
+});
+
+competitorWorker.on('failed', (job, err) => {
+  console.error(`[CompetitorWorker] Job ${job?.id} failed:`, err);
 });
 
 console.log('[Worker] Started successfully');
