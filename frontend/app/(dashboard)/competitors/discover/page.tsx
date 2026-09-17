@@ -58,6 +58,7 @@ export default function DiscoverCompetitorsPage() {
   };
 
   const handleTrack = async (place: any) => {
+    if (!activeOrganization) return;
     try {
       await apiClient.post(`/organizations/${activeOrganization.id}/competitors/${place.id}/track`, {});
       setResults(prev => prev.map(r => r.id === place.id ? { ...r, status: 'ACTIVE', tracking_status: 'TRACKED' } : r));

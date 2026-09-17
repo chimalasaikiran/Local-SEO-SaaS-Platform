@@ -78,7 +78,7 @@ export default function NewAuditWizard() {
       <div className="space-y-4">
         <div className="space-y-2">
           <Label>Business</Label>
-          <Select value={businessId} onValueChange={setBusinessId} disabled={isLoadingBusinesses}>
+          <Select value={businessId} onValueChange={(val) => setBusinessId(val || '')} disabled={isLoadingBusinesses}>
             <SelectTrigger>
               <SelectValue placeholder="Select a business" />
             </SelectTrigger>
@@ -104,7 +104,7 @@ export default function NewAuditWizard() {
 
         <div className="space-y-2">
           <Label>Audit Type</Label>
-          <Select value={auditType} onValueChange={setAuditType}>
+          <Select value={auditType} onValueChange={(val) => setAuditType(val || 'FULL_AUDIT')}>
             <SelectTrigger>
               <SelectValue placeholder="Select type" />
             </SelectTrigger>

@@ -79,6 +79,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       await apiClient.post('/auth/logout');
+    } catch (error) {
+      console.error('Logout API failed:', error);
     } finally {
       setUser(null);
       setOrganizations([]);
